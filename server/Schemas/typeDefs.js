@@ -1,3 +1,4 @@
+// Purpose: GraphQL type definitions
 const typeDefs = `
 type User {
     _id: ID
