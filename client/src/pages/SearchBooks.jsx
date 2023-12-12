@@ -1,5 +1,5 @@
-import { use Params } from 'react-router-dom';
-import { use Query } from '@apollo/react-hooks';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@apollo/react-hooks';
 
 import { useState, useEffect } from 'react';
 import {
