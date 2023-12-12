@@ -23,11 +23,13 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
+
         addUser: async (parent, { username, email, password }) => {
-            const user = await User.create(args);
+            const user = await User.create({ username, email, password });
             const token = signToken(user);
             return { token, user }
         },
+
         saveBook: async (parent, { authors, description, title, bookId, image, link }) => {
             const book = await Book.create({ authors, description, title, bookId, image, link });
             const user = await User.findOneAndUpdate(
@@ -37,6 +39,7 @@ const resolvers = {
             );
             return user;
         }, 
+
         removeBook: async (parent, { bookId }) => {
             const user = await User.findOneAndUpdate(
                 { _id: user._id },
