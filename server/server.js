@@ -12,13 +12,13 @@ const db = require('./config/connection');
 
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3010;
 const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   introspection: true,
-  playground: true,
+  // playground: true,
 });
 
 
@@ -29,7 +29,7 @@ const startApolloServer = async () => {
   app.use(express.json());
 
   app.use('/graphql', expressMiddleware(server, {
-    context: authMiddleware
+    context: authMiddleware,
   }));
 
   if (process.env.NODE_ENV === 'production') {

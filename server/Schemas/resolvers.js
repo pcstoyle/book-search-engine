@@ -1,14 +1,20 @@
-const { User, Book } = require('../models');
+const { User } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        me: async (parent, { username }) => {
-            return User.findOne({ username })
-                .select('-__v -password')
-                .populate('books')
+        // Resolver to get the current user's data
+        me: async (parent, args, context) => {
+            console.log('Context user:', context.user);
+          // Check if the user is authenticated
+          if (context.user) {
+            // Retrieve user data without password, including saved books
+            const userData = await User.findById(context.user._id).select('-__v -password').populate('savedBooks');
+            return userData;
+          }
+          throw new AuthenticationError('No user found');
         },
-    },
+      },
 
     Mutation: {
         login: async (parent, { email, password }) => {
@@ -31,7 +37,7 @@ const resolvers = {
         },
 
         saveBook: async (parent, { authors, description, title, bookId, image, link }) => {
-            const book = await Book.create({ authors, description, title, bookId, image, link });
+            const book = { authors, description, title, bookId, image, link };
             const user = await User.findOneAndUpdate(
                 { _id: user._id },
                 { $addToSet: { savedBooks: book } },
